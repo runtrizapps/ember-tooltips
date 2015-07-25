@@ -241,4 +241,10 @@ export default Ember.Mixin.create({
     });
   },
 
+  actions: {
+    childDidUpdate() {
+      this.tooltipOpenDidChange();
+    }
+  }
+
 });
