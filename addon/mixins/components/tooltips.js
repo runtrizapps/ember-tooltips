@@ -59,8 +59,6 @@ export default Ember.Mixin.create({
       tooltip.detach();
     }
 
-    /* Remove observer, even if it was never added */
-    this.removeObserver('tooltipOpen', this, this.tooltipOpenDidChange);
   }),
 
   /**
@@ -146,16 +144,11 @@ export default Ember.Mixin.create({
 
     this.set('tooltip', tooltip);
 
-    /* Bind observer if manual-triggering mode */
     if (tooltipOptions.event === 'manual') {
       if (componentWasPassed) {
         // Keep track of child tooltip component
         this.set('tooltipChildComponent', component);
-        // Turn 'tooltipOpen' into a computed property, reading from child tooltip component's 'open' option
-        Ember.defineProperty(this, 'tooltipOpen', Ember.computed.reads('tooltipChildComponent.open'));
       }
-      Ember.addObserver(this, 'tooltipOpen', this, this.tooltipOpenDidChange);
-      this.tooltipOpenDidChange();
     }
   }),
 
@@ -175,15 +168,19 @@ export default Ember.Mixin.create({
   @method tooltipOpenDidChange
   */
 
-  tooltipOpenDidChange: function() {
-    const tooltip = this.get('tooltip');
+  tooltipOpenDidChange: on('didUpdateAttrs', function() {
+    if (this.get('tooltipManualMode')) {
+      Ember.run.schedule('sync', this,  function() {
+        const tooltip = this.get('tooltip');
 
-    if (this.get('tooltipOpen')) {
-      tooltip.show();
-    } else {
-      tooltip.hide();
+        if (this.get('tooltipManuallyOpened')) {
+          tooltip.show();
+        } else {
+          tooltip.hide();
+        }
+      });
     }
-  },
+  }),
 
   /**
   Call this method on any view to attach tooltips to all elements in its
