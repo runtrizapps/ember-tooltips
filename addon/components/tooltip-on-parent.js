@@ -1,6 +1,8 @@
 import Ember from 'ember';
 import layout from '../templates/components/tooltip-on-parent';
 
+const { on } = Ember;
+
 export default Ember.Component.extend({
   attributeBindings: ['style'],
   layout: layout,
@@ -21,4 +23,7 @@ export default Ember.Component.extend({
     this.remove();
   }),
 
+  notifyParent: on('didUpdateAttrs', function() {
+    this.get('parentView').send('childDidUpdate', this);
+  }),
 });
