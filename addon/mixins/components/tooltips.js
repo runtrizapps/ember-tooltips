@@ -169,6 +169,18 @@ export default Ember.Mixin.create({
     return !(Ember.VERSION.match('1.13') || Ember.VERSION.match(/^2\./));
   }),
 
+  // Sets up observer-based updates for manual mode (Ember <1.13)
+  setupOldEmberCompat: on('didInsertElement', function() {
+    if (this.get('tooltipManualMode') && this.get('_isOldEmber')) {
+      // Add observer for 'tooltipOpen' attr
+      this.addObserver('tooltipOpen', this, 'tooltipOpenDidChange');
+      // Register observer removal here, to consolidate back-compat code
+      this.on('willDestroyElement', () => {
+        this.removeObserver('tooltipOpen', this, 'tooltipOpenDidChange');
+      });
+    }
+  }),
+
   /**
   Call this method on any view to attach tooltips to all elements in its
   template that have a `.tooltip` class. Tooltip options are set using
