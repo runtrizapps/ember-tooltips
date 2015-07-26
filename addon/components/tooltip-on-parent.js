@@ -27,4 +27,11 @@ export default Ember.Component.extend({
     this.get('parentView').send('childDidUpdate', this);
   }),
   tooltipManualMode: Ember.computed.equal('event', 'manual'),
+
+  actions: {
+    showTooltip() {
+      this.get('parentView').send('showTooltip', this.get('open'));
+    }
+  }
+
 });
