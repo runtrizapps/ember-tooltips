@@ -156,15 +156,10 @@ export default Ember.Mixin.create({
   */
 
   tooltipOpenDidChange: on('didUpdateAttrs', function() {
+    // Only do something when in manual mode
     if (this.get('tooltipManualMode')) {
-      Ember.run.schedule('sync', this,  function() {
-        const tooltip = this.get('tooltip');
-
-        if (this.get('tooltipManuallyOpened')) {
-          tooltip.show();
-        } else {
-          tooltip.hide();
-        }
+      Ember.run.schedule('sync', () => {
+        this.send('showTooltip', this.get('tooltipOpen'));
       });
     }
   }),
