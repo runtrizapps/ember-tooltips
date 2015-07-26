@@ -229,9 +229,25 @@ export default Ember.Mixin.create({
   },
 
   actions: {
-    childDidUpdate() {
-      this.tooltipOpenDidChange();
+    showTooltip(state) {
+      const tooltip = this.get('tooltip');
+
+      // Allow 'showTooltip' to accept false state for hiding
+      if (state === false) {
+        return this.send('hideTooltip');
+      }
+
+      if (tooltip) {
+        tooltip.show();
+      }
+    },
+    hideTooltip() {
+      const tooltip = this.get('tooltip');
+
+      if (tooltip) {
+        tooltip.hide();
+      }
     }
-  }
+  },
 
 });
