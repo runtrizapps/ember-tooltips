@@ -164,6 +164,11 @@ export default Ember.Mixin.create({
     }
   }),
 
+  // Detects old Ember version (TODO - refactor)
+  _isOldEmber: Ember.computed(function() {
+    return !(Ember.VERSION.match('1.13') || Ember.VERSION.match(/^2\./));
+  }),
+
   /**
   Call this method on any view to attach tooltips to all elements in its
   template that have a `.tooltip` class. Tooltip options are set using
