@@ -144,22 +144,9 @@ export default Ember.Mixin.create({
 
     this.set('tooltip', tooltip);
 
-    if (tooltipOptions.event === 'manual') {
-      if (componentWasPassed) {
-        // Keep track of child tooltip component
-        this.set('tooltipChildComponent', component);
-      }
-    }
   }),
 
-  // Tracks manual mode of this component, and child
-  tooltipManualMode_self: Ember.computed.equal('tooltipEvent', 'manual'),
-  tooltipManualMode_child: Ember.computed.equal('tooltipChildComponent.event', 'manual'),
-  // Combines the two manual mode settings
-  tooltipManualMode: Ember.computed.or('tooltipManualMode_self', 'tooltipManualMode_child'),
-
-  // Combines the "open" status of self and child (replaces dynamic computed.reads())
-  tooltipManuallyOpened: Ember.computed.or('tooltipOpen', 'tooltipChildComponent.open'),
+  tooltipManualMode: Ember.computed.equal('tooltipEvent', 'manual'),
 
   /**
   Opens / closes tooltip based on value of 'tooltipOpen'.
