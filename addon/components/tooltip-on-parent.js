@@ -23,13 +23,17 @@ export default Ember.Component.extend({
     this.remove();
   }),
 
+  // Override parent's 'tooltipManualMode' to read from 'event' attr
   tooltipManualMode: Ember.computed.equal('event', 'manual'),
 
+  // Override parent's 'setupOldEmberCompat'
   setupOldEmberCompat: on('didInsertElement', function() {
     if (this.get('tooltipManualMode') && this.get('_isOldEmber')) {
       const observerFn = Ember.run.bind(this, 'send', 'showTooltip');
+
+      // Add observer for 'open' attr
       this.addObserver('open', observerFn);
-      // Must listen for parent destroy, because we remove this component from DOM
+      // Must register on parent destroy, because we remove this component from DOM
       this.get('parentView').on('willDestroyElement', () => {
         this.removeObserver('open', observerFn);
       });

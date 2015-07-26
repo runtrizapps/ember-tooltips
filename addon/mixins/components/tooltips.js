@@ -146,6 +146,7 @@ export default Ember.Mixin.create({
 
   }),
 
+  // Provides uniform API to detect manual mode (is overridden in tooltip-on-parent)
   tooltipManualMode: Ember.computed.equal('tooltipEvent', 'manual'),
 
   /**
@@ -241,7 +242,7 @@ export default Ember.Mixin.create({
   },
 
   actions: {
-    showTooltip(state) {
+    showTooltip(state = true) {
       const tooltip = this.get('tooltip');
 
       // Allow 'showTooltip' to accept false state for hiding
