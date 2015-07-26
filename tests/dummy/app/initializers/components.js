@@ -7,6 +7,14 @@ export function initialize(/* container, application */) {
     'data-test': null,
   });
 
+  // hasBlock polyfill for 1.12 tests
+  //   https://github.com/emberjs/ember.js/issues/11430
+  if (Ember.VERSION.match("1.12")) {
+    Ember.Component.reopen({
+      hasBlock: Ember.computed.alias('template')
+    });
+  }
+
 }
 
 export default {
