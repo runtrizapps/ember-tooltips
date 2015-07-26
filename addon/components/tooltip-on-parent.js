@@ -23,9 +23,6 @@ export default Ember.Component.extend({
     this.remove();
   }),
 
-  notifyParent: on('didUpdateAttrs', function() {
-    this.get('parentView').send('childDidUpdate', this);
-  }),
   tooltipManualMode: Ember.computed.equal('event', 'manual'),
 
   actions: {
